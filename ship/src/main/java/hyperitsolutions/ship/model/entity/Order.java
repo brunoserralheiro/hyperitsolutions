@@ -1,7 +1,7 @@
 /**
  * 
  */
-package hyperitsolutions.ship;
+package hyperitsolutions.ship.model.entity;
 
 import java.io.Serializable;
 

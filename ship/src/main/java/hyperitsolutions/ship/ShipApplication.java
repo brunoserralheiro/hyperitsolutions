@@ -8,6 +8,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.jpa.AvailableSettings;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -21,12 +22,15 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import hyperitsolutions.ship.model.OrderRepository;
+import hyperitsolutions.ship.model.entity.Order;
+
 @PropertySource(value = { "classpath:jdbc.properties" })
 @SpringBootApplication
-@Configuration
-@EnableJpaRepositories(basePackages = { "hyperitsolutions.ship" })
+//@Configuration  // REMEMBER TO NEVER USE THIS ANNOTATION ALONG WITH THE BELOW ONES!!!
+@EnableJpaRepositories(basePackages = "hyperitsolutions.ship.model" )
 @EnableTransactionManagement
-@ComponentScan(basePackages=  { "hyperitsolutions.ship" })
+@ComponentScan(basePackages= "hyperitsolutions.ship" )
 public class ShipApplication {
 
 	private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect";
@@ -34,12 +38,13 @@ public class ShipApplication {
 	private static final String PROPERTY_NAME_HIBERNATE_JDBC_FETCH_SIZE = "hibernate.jdbc.fetch_size";
 	private static final String PROPERTY_NAME_HIBERNATE_JDBC_BATCH_SIZE = "hibernate.jdbc.batch_size";
 	private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
-	private static final String ENTITYMANAGER_PACKAGES_TO_SCAN = "hyperitsolutions.ship";
+	private static final String ENTITYMANAGER_PACKAGES_TO_SCAN = "hyperitsolutions.ship.model.entity";
 	private static final String HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
 
 	public static void main(String[] args) {
 
 		SpringApplication.run(ShipApplication.class, args);
+		
 	}
 
 	@Autowired
@@ -58,7 +63,7 @@ public class ShipApplication {
 		return dataSource;
 	}
 
-	@Bean
+	@Bean(name="transactionManager")
 	public JpaTransactionManager jpaTransactionManager() {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
 		transactionManager.setEntityManagerFactory(entityManagerFactoryBean().getObject());
@@ -104,11 +109,33 @@ public class ShipApplication {
 	}
 	
 	
-//	public void init() {
-//		Order order2 = new Order();
-//		order2.setName("ordertwo");
-//		order2.setId(1L);
-//		order2 = orderRepository.save(order2);
-//	}
+	
+	
+	@Bean
+    public CommandLineRunner run(OrderRepository orderRepository) {
+        return args -> {
+
+        	if (null != orderRepository) {
+				System.out.println("repository NOT null!");
+				Order order2 = new Order();
+				order2.setName("ordertwo");
+				order2.setId(1L);
+				order2 = orderRepository.save(order2);
+			}else {
+				System.out.println("repository is null");
+			}
+            
+
+        };
+    }
+	
+	static class InnerShipApp{
+	
+		
+		
+		static void run(OrderRepository orderRepository) {
+			
+		}
+	}
 
 }
