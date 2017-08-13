@@ -13,10 +13,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -27,10 +25,7 @@ import hyperitsolutions.ship.model.entity.Order;
 
 @PropertySource(value = { "classpath:jdbc.properties" })
 @SpringBootApplication
-//@Configuration  // REMEMBER TO NEVER USE THIS ANNOTATION ALONG WITH THE BELOW ONES!!!
-@EnableJpaRepositories(basePackages = "hyperitsolutions.ship.model" )
 @EnableTransactionManagement
-@ComponentScan(basePackages= "hyperitsolutions.ship" )
 public class ShipApplication {
 
 	private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect";
