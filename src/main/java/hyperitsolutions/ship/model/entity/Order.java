@@ -16,8 +16,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author bruno
@@ -45,16 +48,28 @@ public class Order implements Serializable {
 			@JoinColumn(name = "order_id", nullable = false, updatable = true) }, inverseJoinColumns = {
 					@JoinColumn(name = "items_id", nullable = false, updatable = true) })
 	private List<Item> items;
+	
+	
+	@JsonIgnore
+	@ManyToOne
+	Account account;
 
 	public Order() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public Order(Long id, String name) {
-		super();
-		this.id = id;
+	public Order(Account account, String name, String description) {
+		this.account = account;
 		this.description = name;
+		this.description = description;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	public Long getId() {

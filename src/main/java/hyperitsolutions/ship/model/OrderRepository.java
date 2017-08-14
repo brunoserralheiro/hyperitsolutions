@@ -19,6 +19,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
 	public  Order findByName(String name);
 
-	
+	public long count();
 	
 }
