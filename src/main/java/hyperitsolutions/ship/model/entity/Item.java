@@ -43,7 +43,7 @@ public class Item implements Serializable {
 	
 	
 	
-	@ManyToMany(mappedBy="items")
+	@ManyToMany//(mappedBy="items")
 	private List<Order> orders;
 	
 	/**
