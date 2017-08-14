@@ -30,6 +30,10 @@ public class ShipController {
 	OrderRepository orderRepository; 
 	
 	
+	//TODO Change param from orderName to accountNumber
+	/** POST and GET    /ship/{accountNumber}               (POST will trigger shipment of all orders per account )
+	 *  DELETE and PUT  /ship/{accountNumber}/{orderNumber} (idempotent per order)
+	**/
 	@RequestMapping( method= RequestMethod.GET, value="/{orderName}")
 	Order getOrder( @PathVariable String orderName) throws OrderNotFoundException{
 		System.out.println("REST getOrder with name: "+orderName);
