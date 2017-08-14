@@ -160,12 +160,12 @@ public class ShipApplication {
         return args -> {
 
         	if (null != orderRepository) {
-        		orderRepository.deleteAll();
+        		//orderRepository.deleteAll();
 				System.out.println("repository NOT null!");
-				Order order2 = new Order();
-				order2.setName("ordertwo");
-				order2.setId(1L);
-				order2 = orderRepository.save(order2);
+				Order startOrder = new Order();
+				startOrder.setName("startOrder");
+				startOrder.setDescription("descblablabla");
+				startOrder = orderRepository.save(startOrder);
 			}else {
 				System.out.println("repository is null");
 			}

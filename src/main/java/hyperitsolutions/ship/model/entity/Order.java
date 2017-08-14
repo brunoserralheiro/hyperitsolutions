@@ -4,47 +4,57 @@
 package hyperitsolutions.ship.model.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * @author bruno
  *
  */
 @Entity
-@Table(name="acc_order")
-public class Order implements Serializable{
-	
-	
+@Table(name = "bms_acc_order", uniqueConstraints = { @UniqueConstraint(columnNames = "order_name") })
+public class Order implements Serializable {
+
 	private static final long serialVersionUID = -343472274303593266L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="order_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "order_id")
 	private Long id;
-	
-	@Column(name="name", nullable=false)
+
+	@Column(name = "description", nullable = false)
+	private String description;
+
+	@Column(name = "order_name", nullable = false, unique = true)
 	private String name;
 
-	
-	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "order_item", joinColumns = {
+			@JoinColumn(name = "order_id", nullable = false, updatable = true) }, inverseJoinColumns = {
+					@JoinColumn(name = "items_id", nullable = false, updatable = true) })
+	private List<Item> items;
+
 	public Order() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	
-	
-	
-	public Order(Long id,String name) {
+	public Order(Long id, String name) {
 		super();
 		this.id = id;
-		this.name = name;
+		this.description = name;
 	}
 
 	public Long getId() {
@@ -61,6 +71,22 @@ public class Order implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public List<Item> getItems() {
+		return items;
+	}
+
+	public void setItems(List<Item> items) {
+		this.items = items;
 	}
 
 	@Override
@@ -93,5 +119,7 @@ public class Order implements Serializable{
 			return false;
 		return true;
 	}
+
+	
 
 }
