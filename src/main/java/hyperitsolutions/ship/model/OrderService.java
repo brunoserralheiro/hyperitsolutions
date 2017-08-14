@@ -3,6 +3,7 @@
  */
 package hyperitsolutions.ship.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hyperitsolutions.ship.model.entity.Order;
@@ -14,14 +15,15 @@ import hyperitsolutions.ship.model.entity.Order;
 @Service
 public class OrderService {
 
+	@Autowired
+	OrderRepository dao;
 	
-	
-	public Order findByName(String name , OrderRepository dao) {
+	public Order findByName(String name ) {
 
 		return dao.findByName(name);
 	}
 	
-	public Order save(Order order, OrderRepository dao) {
+	public Order save(Order order ) {
 		return dao.save(order);	
 	}
 

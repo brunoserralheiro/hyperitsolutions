@@ -35,20 +35,20 @@ public class ShipOrderTest {
 	
 		Order order1 = new Order();
 		order1.setName("order1");
-		order1 = orderService.save(order1, orderRepository);
+		order1 = orderService.save(order1);
 		
 		Order order2 = new Order();
 		order2.setName("order2");
-		order2 = orderService.save(order2, orderRepository);
+		order2 = orderService.save(order2);
  
-		Order testOrder1 = orderService.findByName("order1", orderRepository);
-		Order testOrder2 = orderService.findByName("order2", orderRepository);
+		Order testOrder1 = orderService.findByName("order1");
+		Order testOrder2 = orderService.findByName("order2");
 		assertNotNull(order1);
 		assertTrue("order1".equals(testOrder1.getName()));
 		assertTrue("order2".equals(testOrder2.getName()));
 		System.out.println(orderRepository.findAll().size());
 		assertTrue(orderRepository.findAll().size()==3);
-		orderRepository.deleteAll();
+		//orderRepository.deleteAll();
 		
 	}
 
