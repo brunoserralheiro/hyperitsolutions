@@ -1,28 +1,30 @@
 /**
  * 
  */
-package hyperitsolutions.ship;
+package hyperitsolutions.ship.model;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import hyperitsolutions.ship.model.entity.Order;
 
 /**
  * @author bruno
  *
  */
-//@Service
+@Service
 public class OrderService {
 
-	/*@Autowired
+	@Autowired
 	OrderRepository dao;
 	
-	public Order findByName(String name) {
+	public Order findByName(String name ) {
 
 		return dao.findByName(name);
 	}
 	
-	public Order save(Order order) {
+	public Order save(Order order ) {
 		return dao.save(order);	
-	}*/
+	}
 
 }
