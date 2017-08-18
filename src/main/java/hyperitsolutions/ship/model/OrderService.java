@@ -3,9 +3,12 @@
  */
 package hyperitsolutions.ship.model;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import hyperitsolutions.ship.model.entity.Item;
 import hyperitsolutions.ship.model.entity.Order;
 
 /**
@@ -16,15 +19,23 @@ import hyperitsolutions.ship.model.entity.Order;
 public class OrderService {
 
 	@Autowired
-	OrderRepository dao;
+	OrderRepository orderDao;
+	
+	@Autowired
+	ItemRepository itemDao;
 	
 	public Order findByName(String name ) {
 
-		return dao.findByName(name);
+		return orderDao.findByName(name);
 	}
 	
 	public Order save(Order order ) {
-		return dao.save(order);	
+		return orderDao.save(order);	
+	}
+
+	public List<Item> findAllItems(Long id) {
+		
+		return itemDao.findByOrders_Id(id);
 	}
 
 }
