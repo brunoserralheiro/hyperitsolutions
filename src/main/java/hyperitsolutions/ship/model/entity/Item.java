@@ -6,23 +6,23 @@ package hyperitsolutions.ship.model.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.transaction.Transactional;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author bruno
  *
  */
+@Transactional
 @Entity
 @Table(name="bms_item" ,uniqueConstraints = {
 		@UniqueConstraint(columnNames = "item_name") })
@@ -42,7 +42,7 @@ public class Item implements Serializable {
 	private String description;
 	
 	
-	
+	@JsonIgnore
 	@ManyToMany//(mappedBy="items")
 	private List<Order> orders;
 	

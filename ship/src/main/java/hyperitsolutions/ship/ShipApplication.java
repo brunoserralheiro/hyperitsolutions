@@ -27,8 +27,6 @@ import hyperitsolutions.ship.model.entity.Order;
 
 @PropertySource(value = { "classpath:jdbc.properties" })
 @SpringBootApplication
-//@Configuration  // REMEMBER TO NEVER USE THIS ANNOTATION ALONG WITH THE BELOW ONES!!!
-@EnableJpaRepositories(basePackages = "hyperitsolutions.ship.model" )
 @EnableTransactionManagement
 @ComponentScan(basePackages= "hyperitsolutions.ship" )
 public class ShipApplication {
@@ -49,9 +47,6 @@ public class ShipApplication {
 
 	@Autowired
 	private Environment env;
-	
-//	@Autowired
-//	private OrderRepository orderRepository;
 
 	@Bean(name = "lab1")
 	public DataSource dataSource() {

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package hyperitsolutions.ship.model;
+package hyperitsolutions.ship.model.repository;
 
 import java.util.Optional;
 

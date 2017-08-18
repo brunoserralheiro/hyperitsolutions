@@ -18,12 +18,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import hyperitsolutions.ship.controller.util.OrderRequestWrapper;
 import hyperitsolutions.ship.exception.OrderNotFoundException;
-import hyperitsolutions.ship.model.AccountRepository;
-import hyperitsolutions.ship.model.AccountService;
-import hyperitsolutions.ship.model.OrderRepository;
-import hyperitsolutions.ship.model.OrderService;
 import hyperitsolutions.ship.model.entity.Account;
 import hyperitsolutions.ship.model.entity.Order;
+import hyperitsolutions.ship.model.repository.AccountRepository;
+import hyperitsolutions.ship.model.repository.OrderRepository;
+import hyperitsolutions.ship.model.service.AccountService;
+import hyperitsolutions.ship.model.service.OrderService;
 
 /**
  * @author bruno

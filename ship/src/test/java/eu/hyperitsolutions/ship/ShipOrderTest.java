@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import hyperitsolutions.ship.model.OrderRepository;
+import hyperitsolutions.ship.model.repository.OrderRepository;
 import hyperitsolutions.ship.model.entity.Order;
 	
 @RunWith(SpringRunner.class)

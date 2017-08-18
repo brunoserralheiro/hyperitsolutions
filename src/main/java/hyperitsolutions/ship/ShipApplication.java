@@ -34,12 +34,12 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import hyperitsolutions.ship.model.AccountRepository;
-import hyperitsolutions.ship.model.ItemRepository;
-import hyperitsolutions.ship.model.OrderRepository;
 import hyperitsolutions.ship.model.entity.Account;
 import hyperitsolutions.ship.model.entity.Item;
 import hyperitsolutions.ship.model.entity.Order;
+import hyperitsolutions.ship.model.repository.AccountRepository;
+import hyperitsolutions.ship.model.repository.ItemRepository;
+import hyperitsolutions.ship.model.repository.OrderRepository;
 
 @PropertySource(value = { "classpath:jdbc.properties" })
 @SpringBootApplication

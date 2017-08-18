@@ -19,17 +19,19 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import hyperitsolutions.ship.model.ItemRepository;
+import hyperitsolutions.ship.model.repository.ItemRepository;
 
 /**
  * @author bruno
  *
  */
+@Transactional
 @Entity
 @Table(name = "bms_acc_order", uniqueConstraints = { @UniqueConstraint(columnNames = "order_name") })
 public class Order implements Serializable {
