@@ -3,6 +3,7 @@
  */
 package hyperitsolutions.ship.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +21,26 @@ public class OrderService {
 
 	@Autowired
 	OrderRepository orderDao;
-	
+
 	@Autowired
 	ItemRepository itemDao;
-	
-	public Order findByName(String name ) {
+
+	public Order findByName(String name) {
 
 		return orderDao.findByName(name);
 	}
-	
-	public Order save(Order order ) {
-		return orderDao.save(order);	
+
+	public Order save(Order order) {
+		List<Item> items = new ArrayList<>();
+		order.getItems().stream().forEach(i -> {
+			items.add(itemDao.findByName(i.getName()));
+		});
+		order.setItems(items);
+		return orderDao.save(order);
 	}
 
 	public List<Item> findAllItems(Long id) {
-		
+
 		return itemDao.findByOrders_Id(id);
 	}
 

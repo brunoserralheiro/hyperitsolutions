@@ -20,7 +20,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import hyperitsolutions.ship.model.ItemRepository;
 
 /**
  * @author bruno
@@ -31,7 +35,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Order implements Serializable {
 
 	private static final long serialVersionUID = -343472274303593266L;
-
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "order_id")
@@ -58,10 +63,11 @@ public class Order implements Serializable {
 		super();
 	}
 
-	public Order(Account account, String name, String description) {
+	public Order(Account account, String name, String description, List<Item> items) {
 		this.account = account;
-		this.description = name;
+		this.name = name;
 		this.description = description;
+		this.items = items;
 	}
 
 	public Account getAccount() {
@@ -101,6 +107,7 @@ public class Order implements Serializable {
 	}
 
 	public void setItems(List<Item> items) {
+		
 		this.items = items;
 	}
 

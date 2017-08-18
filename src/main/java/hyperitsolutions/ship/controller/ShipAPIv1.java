@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import hyperitsolutions.ship.controller.util.OrderRequestWrapper;
 import hyperitsolutions.ship.exception.OrderNotFoundException;
 import hyperitsolutions.ship.model.AccountRepository;
 import hyperitsolutions.ship.model.AccountService;
@@ -36,14 +37,9 @@ public class ShipAPIv1 extends AbstractShipAPI {
 	@Autowired
 	OrderService orderService;
 
-	@Autowired
-	OrderRepository orderRepository;
-
+	
 	@Autowired
 	AccountService accountService;
-
-	@Autowired
-	AccountRepository accountRepository;
 
 	// TODO Change param from orderName to accountNumber
 	/**
@@ -51,7 +47,7 @@ public class ShipAPIv1 extends AbstractShipAPI {
 	 * per account ) DELETE and PUT /ship/{accountNumber}/{orderNumber} (idempotent
 	 * per order)
 	 **/
-	@RequestMapping(method = RequestMethod.GET, value = ORDER_NAME)
+	@RequestMapping(method = RequestMethod.GET, value = ORDER_NAME, produces = "application/json")
 	ResponseEntity<Order> getOrder(@PathVariable String accountName, @PathVariable String orderName)
 			throws OrderNotFoundException {
 
@@ -70,16 +66,16 @@ public class ShipAPIv1 extends AbstractShipAPI {
 
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = ORDER_NAME)
-	ResponseEntity<?> add(@PathVariable String accountName, @PathVariable String orderName, @RequestBody Order input) {
-		this.validateAccount(accountName);
+	@RequestMapping(method = RequestMethod.POST, value = ORDER_NAME, produces = "application/json")
+	ResponseEntity<?> add(@PathVariable String accountName, @PathVariable String orderName, @RequestBody OrderRequestWrapper input) {
+		
 
-		Account account = accountRepository.findByAccountName(accountName);
+		Account account = this.validateAccount(accountName);
 
 		if (null != account && account.getAccountName().equals(accountName)) {
-			Order result = orderRepository.save(new Order(account, input.getName(), input.getDescription()));
+			Order result = orderService.save(new Order(account, input.getName(), input.getDescription(), input.getItems()));
 
-			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(PATH.concat(ORDER_NAME))
+			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(PATH)
 					.buildAndExpand(result.getId()).toUri();
 
 			return ResponseEntity.created(location).build();
@@ -89,8 +85,9 @@ public class ShipAPIv1 extends AbstractShipAPI {
 
 	}
 
-	private void validateAccount(String accountName) {
-		// TODO Auto-generated method stub
+	private Account validateAccount(String accountName) {
+		
+		return accountService.findByAccountName(accountName);
 
 	}
 

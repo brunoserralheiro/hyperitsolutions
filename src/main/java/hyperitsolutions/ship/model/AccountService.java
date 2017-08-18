@@ -20,9 +20,9 @@ public class AccountService {
 	@Autowired
 	AccountRepository accountRepository;
 	
-//	public Optional<Account> findByAccountName(String accountName) {
-//
-//		return accountRepository.findByAccountName(accountName);
-//	}
+	public Account findByAccountName(String accountName) {
+
+		return accountRepository.findByAccountName(accountName);
+	}
 
 }
