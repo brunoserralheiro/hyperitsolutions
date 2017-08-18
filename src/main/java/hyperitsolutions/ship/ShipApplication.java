@@ -1,6 +1,8 @@
 package hyperitsolutions.ship;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.Filter;
@@ -32,7 +34,11 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import hyperitsolutions.ship.model.AccountRepository;
+import hyperitsolutions.ship.model.ItemRepository;
 import hyperitsolutions.ship.model.OrderRepository;
+import hyperitsolutions.ship.model.entity.Account;
+import hyperitsolutions.ship.model.entity.Item;
 import hyperitsolutions.ship.model.entity.Order;
 
 @PropertySource(value = { "classpath:jdbc.properties" })
@@ -51,51 +57,46 @@ public class ShipApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(ShipApplication.class, args);
-		
+
 	}
 
 	@Autowired
 	private Environment env;
 
 	// CORS
-		@Bean
-		FilterRegistrationBean corsFilter(
-				@Value("${tagit.origin:http://localhost:8080}") String origin) {
-			FilterRegistrationBean bean =  new FilterRegistrationBean();
-			bean.setFilter(
-			new Filter() {
-				
-				@Override
-				public void doFilter(ServletRequest req, ServletResponse res,
-						FilterChain chain) throws IOException, ServletException {
-					HttpServletRequest request = (HttpServletRequest) req;
-					HttpServletResponse response = (HttpServletResponse) res;
-					String method = request.getMethod();
-					// this origin value could just as easily have come from a database
-					response.setHeader("Access-Control-Allow-Origin", origin);
-					response.setHeader("Access-Control-Allow-Methods",
-							"POST,GET,PUT,OPTIONS,DELETE");
-					response.setHeader("Access-Control-Max-Age", Long.toString(60 * 60));
-					response.setHeader("Access-Control-Allow-Credentials", "true");
-					response.setHeader(
-							"Access-Control-Allow-Headers",
-							"Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization");
-					if ("OPTIONS".equals(method)) {
-						response.setStatus(HttpStatus.OK.value());
-					}
-					else {
-						chain.doFilter(req, res);
-					}
-				}
+	@Bean
+	FilterRegistrationBean corsFilter(@Value("${tagit.origin:http://localhost:8080}") String origin) {
+		FilterRegistrationBean bean = new FilterRegistrationBean();
+		bean.setFilter(new Filter() {
 
-				public void init(FilterConfig filterConfig) {
+			@Override
+			public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+					throws IOException, ServletException {
+				HttpServletRequest request = (HttpServletRequest) req;
+				HttpServletResponse response = (HttpServletResponse) res;
+				String method = request.getMethod();
+				// this origin value could just as easily have come from a database
+				response.setHeader("Access-Control-Allow-Origin", origin);
+				response.setHeader("Access-Control-Allow-Methods", "POST,GET,PUT,OPTIONS,DELETE");
+				response.setHeader("Access-Control-Max-Age", Long.toString(60 * 60));
+				response.setHeader("Access-Control-Allow-Credentials", "true");
+				response.setHeader("Access-Control-Allow-Headers",
+						"Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization");
+				if ("OPTIONS".equals(method)) {
+					response.setStatus(HttpStatus.OK.value());
+				} else {
+					chain.doFilter(req, res);
 				}
+			}
 
-				public void destroy() {
-				}
-			});
-			return bean;
-		}
+			public void init(FilterConfig filterConfig) {
+			}
+
+			public void destroy() {
+			}
+		});
+		return bean;
+	}
 
 	@Bean(name = "lab1")
 	public DataSource dataSource() {
@@ -107,7 +108,7 @@ public class ShipApplication {
 		return dataSource;
 	}
 
-	@Bean(name="transactionManager")
+	@Bean(name = "transactionManager")
 	public JpaTransactionManager jpaTransactionManager() {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
 		transactionManager.setEntityManagerFactory(entityManagerFactoryBean().getObject());
@@ -120,7 +121,7 @@ public class ShipApplication {
 		return vendorAdapter;
 	}
 
-	@Bean(name="entityManagerFactory")
+	@Bean(name = "entityManagerFactory")
 	public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
 
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -151,35 +152,60 @@ public class ShipApplication {
 		properties.put(AvailableSettings.SCHEMA_GEN_DATABASE_ACTION, "none");
 		return properties;
 	}
-	
-	
-	
-	
+
 	@Bean
-    public CommandLineRunner run(OrderRepository orderRepository) {
-        return args -> {
+	public CommandLineRunner run(OrderRepository orderRepository, AccountRepository accountRepository,
+			ItemRepository itemRepository) {
+		return args -> {
 
-        	if (null != orderRepository) {
-        		orderRepository.deleteAll();
-				System.out.println("repository NOT null!");
-				Order order2 = new Order();
-				order2.setName("ordertwo");
-				order2.setId(1L);
-				order2 = orderRepository.save(order2);
-			}else {
-				System.out.println("repository is null");
+			Account startAccount = accountRepository.findByAccountName("testaccount");
+			if (null == startAccount) {
+				startAccount = new Account();
+				startAccount.setAccountName("testaccount");
+				startAccount.setAccountPassword("123");
+				startAccount = accountRepository.save(startAccount);
 			}
-            
 
-        };
-    }
-	
-	static class InnerShipApp{
-	
-		
-		
-		static void run(OrderRepository orderRepository) {
+			Item startItem = itemRepository.findByName("Zeon PRocessor E123XX456");
+			List<Item> items = new ArrayList<>();
+			if (null == startItem) {
+				startItem = new Item();
+				startItem.setName("Zeon PRocessor E123XX456");
+				startItem.setDescription("Test Item blablabla");
+				startItem = itemRepository.save(startItem);
+			}
+
 			
+			
+			Order startOrder = orderRepository.findByName("startOrder");
+			List<Order> orders = new ArrayList<>();
+			if (null == startOrder) {
+				startOrder = new Order();
+				startOrder.setName("startOrder");
+				startOrder.setDescription("descblablabla");
+				startOrder = orderRepository.save(startOrder);
+				orders.add(startOrder);
+				startItem = itemRepository.findByName("Zeon PRocessor E123XX456");
+				startItem.setOrders(orders);
+				itemRepository.save(startItem);
+				items.add(startItem);
+				startOrder.setItems(items);
+				startOrder = orderRepository.save(startOrder);
+			}
+			orders.clear();
+			startOrder = orderRepository.findByName("startOrder");
+			orders.add(startOrder);
+
+			startAccount.setOrders(orders);
+			startAccount = accountRepository.save(startAccount);
+
+		};
+	}
+
+	static class InnerShipApp {
+
+		static void run(OrderRepository orderRepository) {
+
 		}
 	}
 
